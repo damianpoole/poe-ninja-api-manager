@@ -86,5 +86,48 @@ describe("Helper class", () => {
 
             expect(result).toEqual("hello");
         });
-    })
+    });
+
+    describe("addApiTypeToMatches", () => {
+        it("Should correctly add the passed type to each item in the matches", () => {
+            const matches = [{}, {}];
+
+            const matchesWithType = Helpers.addApiTypeToMatches("foo", matches);
+
+            expect(matchesWithType[0].apiType).toEqual("foo");
+            expect(matchesWithType[1].apiType).toEqual("foo");
+        });
+
+        it("Should not mutate the passed matches", () => {
+            const matches = [{}, {}];
+
+            Helpers.addApiTypeToMatches("foo", matches);
+
+            expect(matches).toEqual([{}, {}]);
+        });
+    });
+
+    describe("hasCurrencyDetailsData", () => {
+        it("Should return true if the passed object has currency details", () => {
+            const obj = {
+                currencyDetails: [{}]
+            };
+
+            expect(Helpers.hasCurrencyDetailsData(obj)).toEqual(true);
+        });
+
+        it("Should return false if the object doesn't have currency details", () => {
+            const obj = {};
+
+            expect(Helpers.hasCurrencyDetailsData(obj)).toEqual(false);
+        });
+
+        it("Should return false if the currencyDetails is empty", () => {
+            const obj = {
+                currencyDetails: []
+            };
+
+            expect(Helpers.hasCurrencyDetailsData(obj)).toEqual(false);
+        });
+    });
 });

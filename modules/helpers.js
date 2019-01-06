@@ -24,28 +24,6 @@ class Helpers {
   }
 
   /*
-  * Returns true if the object has the property and is not empty
-  */
-  static hasPropertyWithData(obj, prop) {
-    if (typeof obj !== "undefined" && obj.hasOwnProperty(prop) && Object.keys(obj[prop]).length !== 0) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /*
-  * Returns true if the object has the property, can be empty
-  */
-  static hasProperty(obj, prop) {
-    if (typeof obj !== "undefined" && obj.hasOwnProperty(prop)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  /*
   * Returns the overview that corresponds to the item API type
   */
   static getOverviewByType(type, apis) {
@@ -58,27 +36,33 @@ class Helpers {
   * Returns true if an API object is valid. For poe.ninja APIs, this is true if the object has the `lines` key
   */
   static isValidNinjaApi(obj) {
-    return Helpers.hasProperty(obj, "lines");
+    const hasProperty = (obj, prop) => typeof obj !== "undefined" && obj.hasOwnProperty(prop);
+
+    return hasProperty(obj, "lines");
   }
 
-  /*
-  * Returns true if an API object contains currency details
-  */
+  /**
+   * Returns true if an API object contains currency details
+   * @param {Object} obj The object to check
+   * @return {Boolean}
+   */
   static hasCurrencyDetailsData(obj) {
-    return Helpers.hasPropertyWithData(obj, "currencyDetails");
+    const hasPropertyWithData = (obj, prop) => typeof obj !== "undefined" && obj.hasOwnProperty(prop) && Object.keys(obj[prop]).length !== 0;
+
+    return hasPropertyWithData(obj, "currencyDetails");
   }
 
-  /*
-  * Adds the API type to matches and returns the adjusted matches array
-  */
+  /**
+   * Adds the API type to matches and returns a new array of matches
+   * @param {String} type The type to add to each match
+   * @param {Object[]} matches Array of each match
+   * @return {Object[]}
+   */
   static addApiTypeToMatches(type, matches) {
-    matches = matches || [];
-
-    for (var i = 0; i < matches.length; i++) {
-      matches[i]["apiType"] = type;
-    }
-
-    return matches;
+    return matches.map(({ ...x }) => {
+      x.apiType = type;
+      return x;
+    });
   }
 }
 
