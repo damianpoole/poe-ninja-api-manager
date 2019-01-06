@@ -33,4 +33,58 @@ describe("Helper class", () => {
             expect(Helpers.isSameObject(object1, object2)).toEqual(false);
         });
     });
+
+    describe("sumObjectValues", () => {
+        it("Should correctly sum up the values of an object", () => {
+            const object = {
+                prop1: 10,
+                prop2: 10,
+                prop3: 100
+            };
+
+            expect(Helpers.sumObjectValues(object)).toEqual(120);
+        });
+    });
+
+    describe("buildApiUrl", () => {
+        it("Should return a string for the desired api call", () => {
+            const expectedResult = "https://poe.ninja/api/data/foooverview?league=baz&type=bar";
+
+            expect(Helpers.buildApiUrl("foo", "bar", "baz"))
+                .toEqual(expectedResult)
+        });
+    });
+
+    describe("getOverviewByType", () => {
+        const apis = [{
+            overview: "hello",
+            type: "test"
+        }];
+
+        it("Should return unknown for a type that doesn't exist", () => {
+            const result = Helpers.getOverviewByType("foo", apis);
+
+            expect(result).toEqual("unknown");
+        });
+
+        it("Should return the correct overview for the passed type", () => {
+            const result = Helpers.getOverviewByType("test", apis);
+
+            expect(result).toEqual("hello");
+        });
+
+        it("Should return the first result for duplicated types", () => {
+            const apis = [{
+                overview: "hello",
+                type: "test"
+            }, {
+                overview: "goodbye",
+                type: "test"
+            }];
+
+            const result = Helpers.getOverviewByType("test", apis);
+
+            expect(result).toEqual("hello");
+        });
+    })
 });

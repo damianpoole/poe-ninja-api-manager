@@ -3,14 +3,9 @@ class Helpers {
   * Sums up all the values of an object
   */
   static sumObjectValues(obj) {
-    var sum = 0;
-    for(var element in obj) {
-      if(obj.hasOwnProperty(element) ) {
-        sum += parseFloat(obj[element]);
-      }
-    }
-
-    return sum;
+    return Object.keys(obj).reduce((acc, val) => {
+      return acc += parseFloat(obj[val]);
+    }, 0);
   }
 
   /*
@@ -25,14 +20,14 @@ class Helpers {
   * Builds the URL for an API call
   */
   static buildApiUrl(overview, type, league) {
-    return "https://poe.ninja/api/data/" + overview + "overview?league=" + league + "&type=" + type;
+    return `https://poe.ninja/api/data/${overview}overview?league=${league}&type=${type}`;
   }
 
   /*
   * Returns true if the object has the property and is not empty
   */
   static hasPropertyWithData(obj, prop) {
-    if(typeof obj !== "undefined" && obj.hasOwnProperty(prop) && Object.keys(obj[prop]).length !== 0) {
+    if (typeof obj !== "undefined" && obj.hasOwnProperty(prop) && Object.keys(obj[prop]).length !== 0) {
       return true;
     }
 
@@ -43,7 +38,7 @@ class Helpers {
   * Returns true if the object has the property, can be empty
   */
   static hasProperty(obj, prop) {
-    if(typeof obj !== "undefined" && obj.hasOwnProperty(prop)) {
+    if (typeof obj !== "undefined" && obj.hasOwnProperty(prop)) {
       return true;
     }
 
@@ -54,13 +49,9 @@ class Helpers {
   * Returns the overview that corresponds to the item API type
   */
   static getOverviewByType(type, apis) {
-    var api = apis.filter(function (api) { return api.type === type; });
+    const api = apis.filter(api => api.type === type);
 
-    if(api.length !== 0) {
-      return api[0].overview;
-    }
-
-    return "unknown";
+    return api.length !== 0 ? api[0].overview : "unknown";
   }
 
   /*
@@ -83,7 +74,7 @@ class Helpers {
   static addApiTypeToMatches(type, matches) {
     matches = matches || [];
 
-    for(var i = 0; i < matches.length; i++) {
+    for (var i = 0; i < matches.length; i++) {
       matches[i]["apiType"] = type;
     }
 
